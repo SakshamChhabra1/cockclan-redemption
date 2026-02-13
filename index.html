@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Someone Special</title>
+    <style>
+        body { font-family: 'Georgia', serif; background: #fff5f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .container { text-align: center; background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 80%; }
+        button { padding: 10px 25px; font-size: 1.2rem; cursor: pointer; border: none; border-radius: 8px; margin: 10px; transition: 0.3s; }
+        .yes-btn { background-color: #ff4d6d; color: white; }
+        .no-btn { background-color: #adb5bd; color: white; position: relative; }
+        
+        #slideshow, #final-screen { display: none; width: 100%; height: 100vh; background: black; position: fixed; top: 0; left: 0; z-index: 10; }
+        .slide-img { max-height: 90vh; max-width: 100%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; }
+        
+        #final-screen { background: #fff5f5; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 20; }
+        .proposal-img { width: 300px; border-radius: 15px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <div id="q1" class="container">
+        <h1>Are you Aaliya Chhabra?</h1>
+        <button class="yes-btn" onclick="startPPT()">Yes</button>
+        <button class="no-btn" onclick="nextQuestion()">No</button>
+    </div>
+
+    <div id="q2" class="container" style="display:none;">
+        <h1>Are you Aaliya Nazir?</h1>
+        <button class="yes-btn" onclick="startPPT()">Yes</button>
+    </div>
+
+    <div id="slideshow">
+        <img src="slide1.jpg" class="slide-img">
+        <img src="slide2.jpg" class="slide-img">
+        <img src="slide3.jpg" class="slide-img">
+        <img src="slide4.jpg" class="slide-img">
+        <img src="slide5.jpg" class="slide-img">
+        <img src="slide6.jpg" class="slide-img">
+        <img src="slide7.jpg" class="slide-img">
+        <img src="slide8.jpg" class="slide-img">
+        <img src="slide9.jpg" class="slide-img">
+        <img src="slide10.jpg" class="slide-img">
+        <img src="slide11.jpg" class="slide-img">
+        <img src="slide12.jpg" class="slide-img">
+    </div>
+
+    <div id="final-screen">
+        <h1 id="final-text">Will you be my Valentine?</h1>
+        <img id="success-img" src="celebration.jpg" style="display:none;" class="proposal-img">
+        <div id="final-buttons">
+            <button id="main-yes" class="yes-btn" onclick="celebrate()">Yes</button>
+            <button id="main-no" class="no-btn" onmouseover="moveNo()" onclick="moveNo()">No</button>
+        </div>
+    </div>
+
+    <audio id="bgMusic" src="music.mp3" loop></audio>
+    <audio id="noMusic" src="no-audio.mp3"></audio>
+    <audio id="successMusic" src="final-audio.mp3"></audio>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide-img');
+        let yesSize = 1;
+
+        function nextQuestion() {
+            document.getElementById('q1').style.display = 'none';
+            document.getElementById('q2').style.display = 'block';
+        }
+
+        function startPPT() {
+            document.getElementById('q1').style.display = 'none';
+            document.getElementById('q2').style.display = 'none';
+            document.getElementById('slideshow').style.display = 'block';
+            document.getElementById('bgMusic').play();
+            showSlides();
+        }
+
+        function showSlides() {
+            if (currentSlide < slides.length) {
+                if (currentSlide > 0) slides[currentSlide - 1].style.display = 'none';
+                slides[currentSlide].style.display = 'block';
+                currentSlide++;
+                setTimeout(showSlides, 6500); // Change slides every 6.5 seconds
+            } else {
+                document.getElementById('slideshow').style.display = 'none';
+                document.getElementById('final-screen').style.display = 'flex';
+            }
+        }
+
+        function moveNo() {
+            document.getElementById('noMusic').play();
+            // Move No Button
+            const noBtn = document.getElementById('main-no');
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // Grow Yes Button
+            yesSize += 0.4;
+            document.getElementById('main-yes').style.transform = `scale(${yesSize})`;
+        }
+
+        function celebrate() {
+            document.getElementById('bgMusic').pause();
+            document.getElementById('successMusic').play();
+            document.getElementById('final-text').innerText = "Yay! ";
+            document.getElementById('final-buttons').style.display = 'none';
+            document.getElementById('success-img').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
